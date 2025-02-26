@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import {
   CssBaseline,
   Box,
@@ -23,14 +23,19 @@ import { MdDelete, MdCheckCircle } from 'react-icons/md';
 import { FaCircle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
+
+interface Task {
+    text: string;
+    completed: boolean;
+  }
 const TodoApp = () => {
-  const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState<Task[]>([]);
   const [filter, setFilter] = useState('all');
   const [inputValue, setInputValue] = useState('');
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    const savedTasks = localStorage.getItem('tasks')?.trim() === '' ? [] : JSON.parse(localStorage.getItem('tasks') || '[]');
     setTasks(savedTasks);
   }, []);
 
@@ -45,14 +50,14 @@ const TodoApp = () => {
     }
   };
 
-  const toggleTaskCompletion = (index) => {
+  const toggleTaskCompletion = (index: number) => {
     const updatedTasks = tasks.map((task, i) =>
       i === index ? { ...task, completed: !task.completed } : task
     );
     setTasks(updatedTasks);
   };
 
-  const deleteTask = (index) => {
+  const deleteTask = (index:unknown) => {
     const updatedTasks = tasks.filter((_, i) => i !== index);
     setTasks(updatedTasks);
   };
@@ -143,8 +148,8 @@ const TodoApp = () => {
                 </Typography>
               ) : (
                 filteredTasks.map((task, index) => (
-                  <ListItem
-                    button
+                    <ListItem
+                    component="li"
                     key={index}
                     onClick={() => toggleTaskCompletion(index)}
                     sx={{
